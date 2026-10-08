@@ -1,0 +1,26 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Maven
+target/
+**/target/
+
+# Encoding / generated video files
+temp/
+**/temp/
+
+# IDE
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# Java
+*.class
+
+# OS
+.DS_Store
+Thumbs.db

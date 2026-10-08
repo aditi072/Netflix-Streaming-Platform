@@ -1,0 +1,48 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Content Service",
+      "request": "launch",
+      "mainClass": "com.netflix.contentservice.ContentServiceApplication",
+      "projectName": "content-service",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Video Service",
+      "request": "launch",
+      "mainClass": "com.netflix.videoservice.VideoServiceApplication",
+      "projectName": "video-service",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Encoding Service",
+      "request": "launch",
+      "mainClass": "com.netflix.encodingservice.EncodingServiceApplication",
+      "projectName": "encoding-service",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Streaming Service",
+      "request": "launch",
+      "mainClass": "com.netflix.streamingservice.StreamingServiceApplication",
+      "projectName": "streaming-service",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All Services",
+      "configurations": [
+        "Content Service",
+        "Video Service",
+        "Encoding Service",
+        "Streaming Service"
+      ]
+    }
+  ]
+}

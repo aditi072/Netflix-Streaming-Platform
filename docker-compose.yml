@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+
+  # ─────────────────────────────────────────
+  # REDIS — Streaming URL Cache
+  # ─────────────────────────────────────────
+  redis:
+    image: redis:latest
+    container_name: redis-netflix
+    ports:
+      - "6379:6379"
+    networks:
+      - netflix-network
+
+  # ─────────────────────────────────────────
+  # MYSQL — Movie Catalog Storage
+  # ─────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-netflix
+    environment:
+      MYSQL_ROOT_PASSWORD: Adi@78072
+      MYSQL_DATABASE: content_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - netflix-network
+
+  # ─────────────────────────────────────────
+  # ZOOKEEPER — Required by Kafka
+  # ─────────────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - netflix-network
+
+  # ─────────────────────────────────────────
+  # KAFKA — Event Streaming
+  # ─────────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - netflix-network
+
+volumes:
+  mysql-data:
+
+networks:
+  netflix-network:
+    driver: bridge
